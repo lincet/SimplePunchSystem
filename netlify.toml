@@ -1,0 +1,24 @@
+# Netlify：前端是純靜態檔案，不需要建置。
+# 部署前請把下方 Render 網址換成你實際的後端網址（Render dashboard 上服務名稱下方的 *.onrender.com）。
+[build]
+  publish = "frontend"
+  command = "echo '前端不需要建置'"
+
+# 把 /api/* 轉發到 Render 後端，讓手機只看到同一個網址（cookie 同源、相機可用 HTTPS）
+[[redirects]]
+  from = "/api/*"
+  to = "https://simple-punch-api.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "same-origin"
+    Permissions-Policy = "camera=(self), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"

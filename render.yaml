@@ -1,0 +1,37 @@
+# Render Blueprint：在 https://dashboard.render.com 選「New → Blueprint」，連結此 repo 即可建立後端。
+#
+# 目前是 demo 設定（免費方案）：
+#   - 沒有永久磁碟，服務休眠／重新部署後資料會清空，啟動時會自動重建示範資料（DEMO_SEED=true）。
+#   - 閒置 15 分鐘會休眠，下次開啟約需 30–60 秒喚醒（前端會顯示「伺服器喚醒中」）。
+#
+# 轉為正式使用時：
+#   1. plan 改成 starter
+#   2. 取消下方 disk 區塊的註解
+#   3. DATA_DIR 改成 /var/data、DEMO_SEED 改成 "false"
+#   4. 在 Render dashboard 設定 ADMIN_PASSWORD（老闆初始密碼，首次登入需更改）
+services:
+  - type: web
+    name: simple-punch-api
+    runtime: go
+    plan: free
+    region: singapore
+    rootDir: backend
+    buildCommand: go build -ldflags "-s -w" -o bin/server ./cmd/server
+    startCommand: ./bin/server
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: DATA_DIR
+        value: /tmp/punch-data
+      - key: TZ_NAME
+        value: Asia/Taipei
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: DEMO_SEED
+        value: "true"
+      - key: ADMIN_USERNAME
+        value: admin
+    # disk:
+    #   name: punch-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
