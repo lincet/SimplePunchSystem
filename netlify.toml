@@ -7,7 +7,7 @@
 # 把 /api/* 轉發到 Render 後端，讓手機只看到同一個網址（cookie 同源、相機可用 HTTPS）
 [[redirects]]
   from = "/api/*"
-  to = "https://simple-punch-api.onrender.com/api/:splat"
+  to = "https://simplepunchsystem.onrender.com/api/:splat"
   status = 200
   force = true
 
